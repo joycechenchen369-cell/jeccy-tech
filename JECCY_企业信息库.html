@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>JECCY 企业信息库</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --jeccy-blue:#36497d;
+  --jeccy-blue-light:#4f68b3;
+  --jeccy-blue-soft:#6f8ad6;
+  --bg-deep:#050712;
+  --text-main:#f5f7ff;
+  --text-sub:#a2aacb;
+  --border-soft:rgba(255,255,255,0.06);
+  --glass:rgba(10,13,32,0.92);
+  --topbar-height:56px;
+  --dark:#0d1b3e;
+  --dark2:#112050;
+  --dark3:#162a6a;
+  --blue:#1a56db;
+  --blue2:#3b82f6;
+  --blue3:#60a5fa;
+  --accent:#38bdf8;
+  --accent2:#0ea5e9;
+  --light:#e0f0ff;
+  --text-muted:#94b8d8;
+  --card-bg:rgba(255,255,255,0.05);
+  --card-border:rgba(96,165,250,0.18);
+  --radius:14px;
+  --radius-sm:8px;
+}
+html,body{height:100%;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:
+    radial-gradient(circle at 20% 0, rgba(102, 165, 255, 0.16), transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(63, 117, 255, 0.22), transparent 55%),
+    var(--bg-deep);
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--dark2);}
+::-webkit-scrollbar-thumb{background:var(--blue3);border-radius:2px;}
+
+/* ── Top Bar ── */
+.topbar{
+  position:relative;
+  flex-shrink:0;
+  height:var(--topbar-height);
+  padding:0 16px;
+  padding-top:env(safe-area-inset-top,0px);
+  background:
+    radial-gradient(circle at 0 0, rgba(111, 170, 255, 0.46), transparent 55%),
+    linear-gradient(120deg, #020518, #06081e 55%, #020310);
+  border-bottom:1px solid var(--border-soft);
+  box-shadow:0 10px 30px rgba(0,0,0,0.75);
+  display:flex;
+  align-items:center;
+}
+.topbar-brand{
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
+  z-index:2;
+  max-width:42%;
+}
+.brand-logo{
+  flex-shrink:0;
+  margin-right:10px;
+  display:flex;
+  align-items:center;
+}
+.brand-logo img{
+  height:28px;
+  width:auto;
+  display:block;
+}
+.brand-text-block{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+}
+.brand-text-sub{
+  font-size:10px;
+  color:var(--text-sub);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.topbar-nav{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1;
+  display:flex;
+  align-items:center;
+  pointer-events:none;
+}
+.topbar-nav .nav-list{pointer-events:auto;}
+.nav-list{
+  display:flex;
+  list-style:none;
+  gap:8px;
+}
+.topbar-right{
+  margin-left:auto;
+  flex-shrink:0;
+  z-index:2;
+}
+.topbar-tag{
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid rgba(152,177,255,0.65);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:#d9e3ff;
+  background:linear-gradient(120deg,rgba(89,132,255,0.9),rgba(149,196,255,0.7));
+  box-shadow:0 4px 18px rgba(3,10,53,0.7);
+  white-space:nowrap;
+}
+.nav-button{
+  border:none;
+  background:var(--glass);
+  color:#dde1ff;
+  padding:7px 14px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  font-size:13px;
+  white-space:nowrap;
+  box-shadow:0 8px 22px rgba(0,0,0,0.7);
+  transition:all 0.18s ease-out;
+  text-decoration:none;
+}
+.nav-button span.icon-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--jeccy-blue-soft),#cce4ff);
+  box-shadow:0 0 0 2px rgba(120,163,255,0.5);
+  flex-shrink:0;
+}
+.nav-button span.badge{
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:999px;
+  border:1px solid rgba(148,184,255,0.6);
+  color:#dce7ff;
+  background:linear-gradient(120deg,rgba(76,120,255,0.9),rgba(150,199,255,0.9));
+  flex-shrink:0;
+}
+.nav-button:hover{
+  background:rgba(19,31,76,0.96);
+  transform:translateY(-1px);
+}
+.nav-button.active{
+  background:linear-gradient(135deg,var(--jeccy-blue),var(--jeccy-blue-light));
+  color:#ffffff;
+  box-shadow:0 14px 32px rgba(6,15,59,0.95),0 0 0 1px rgba(189,212,255,0.8);
+}
+.nav-button.active span.badge{
+  color:var(--jeccy-blue);
+  background:#f5f8ff;
+  border-color:transparent;
+}
+
+/* ── Layout ── */
+.layout{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:230px 1fr;
+}
+
+/* ── Sidebar ── */
+.sidebar{
+  background:rgba(255,255,255,0.02);
+  border-right:1px solid rgba(96,165,250,0.1);
+  padding:24px 0;
+  overflow-y:auto;
+}
+.sidebar-logo-area{padding:0 20px 20px;border-bottom:1px solid rgba(96,165,250,0.1);margin-bottom:12px;}
+.sidebar-app-title{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:1px;}
+.sidebar-app-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.sidebar-cat{font-size:10px;font-weight:600;color:rgba(148,184,216,0.6);padding:0 20px;margin:16px 0 6px;letter-spacing:1.2px;text-transform:uppercase;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:var(--text-muted);cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;user-select:none;}
+.sidebar-item:hover{background:rgba(96,165,250,0.06);color:var(--light);}
+.sidebar-item.active{background:rgba(56,189,248,0.08);color:var(--accent);border-left-color:var(--accent);font-weight:500;}
+.si-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;}
+.sidebar-divider{height:1px;background:rgba(96,165,250,0.1);margin:14px 20px;}
+
+/* ── Content ── */
+.content{
+  padding:32px;
+  overflow-y:auto;
+  background:var(--dark);
+  min-height:0;
+}
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(135deg,var(--dark3) 0%,rgba(26,86,219,0.4) 100%);
+  border:1px solid rgba(96,165,250,0.2);border-radius:20px;
+  padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,0.1),transparent 70%);}
+.hero-tag{display:inline-block;padding:4px 12px;border-radius:12px;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.3);font-size:11px;color:var(--accent);font-weight:500;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;}
+.hero h1{font-size:24px;font-weight:700;line-height:1.3;margin-bottom:8px;}
+.hero h1 span{color:var(--accent);}
+.hero p{font-size:13px;color:var(--text-muted);line-height:1.7;max-width:500px;}
+
+/* ── Section Title ── */
+.sec-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.sec-title::after{content:'';flex:1;height:1px;background:rgba(96,165,250,0.12);}
+
+/* ── Announcement ── */
+.ann-list{margin-bottom:24px;}
+.ann-item{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:16px 20px;margin-bottom:10px;
+  cursor:pointer;display:flex;align-items:flex-start;gap:14px;
+  transition:all 0.2s;
+}
+.ann-item:hover{border-color:rgba(56,189,248,0.35);transform:translateX(3px);}
+.ann-indicator{width:3px;border-radius:2px;align-self:stretch;flex-shrink:0;min-height:40px;}
+.ind-new{background:var(--accent);}
+.ind-urgent{background:#f87171;}
+.ind-normal{background:rgba(148,184,216,0.3);}
+.ann-body{flex:1;}
+.ann-title-text{font-size:14px;font-weight:500;color:#fff;margin-bottom:5px;}
+.ann-meta{font-size:12px;color:var(--text-muted);}
+.ann-badge{padding:3px 10px;border-radius:8px;font-size:10px;font-weight:600;flex-shrink:0;align-self:flex-start;letter-spacing:0.5px;}
+.badge-new{background:rgba(56,189,248,0.15);color:var(--accent);border:1px solid rgba(56,189,248,0.3);}
+.badge-urgent{background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.25);}
+.badge-normal{background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid rgba(255,255,255,0.08);}
+
+/* ── Password Cards ── */
+.pwd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:24px;}
+.pwd-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:20px;
+  transition:all 0.2s;
+}
+.pwd-card:hover{border-color:rgba(56,189,248,0.35);box-shadow:0 4px 24px rgba(56,189,248,0.08);}
+.pwd-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.pwd-icon{
+  width:38px;height:38px;border-radius:10px;
+  background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.pwd-name{font-size:13px;font-weight:600;color:#fff;}
+.pwd-status{display:flex;align-items:center;gap:5px;margin-top:3px;}
+.status-dot{width:6px;height:6px;border-radius:50%;}
+.dot-green{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5);}
+.dot-amber{background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,0.5);}
+.pwd-status-text{font-size:11px;color:var(--text-muted);}
+.pwd-label{font-size:11px;color:var(--text-muted);margin-bottom:5px;}
+.pwd-value{
+  font-size:17px;font-weight:700;
+  font-family:"SF Mono","Fira Code","Courier New",monospace;
+  color:var(--accent);letter-spacing:2px;
+  background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.15);
+  border-radius:8px;padding:8px 12px;margin-bottom:10px;
+  cursor:pointer;transition:background 0.15s;position:relative;
+}
+.pwd-value:hover{background:rgba(56,189,248,0.12);}
+.copy-hint{font-size:10px;color:rgba(56,189,248,0.5);}
+.pwd-note{font-size:11px;color:var(--text-muted);padding-top:10px;border-top:1px solid rgba(96,165,250,0.1);}
+
+/* ── WiFi Cards ── */
+.wifi-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+.wifi-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:22px;
+  transition:all 0.2s;
+}
+.wifi-card:hover{border-color:rgba(56,189,248,0.35);}
+.wifi-top{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.wifi-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(26,86,219,0.3),rgba(56,189,248,0.15));
+  border:1px solid rgba(56,189,248,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.wifi-name{font-size:14px;font-weight:600;color:#fff;}
+.wifi-type{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.wifi-field{margin-bottom:14px;}
+.wifi-field-label{font-size:11px;color:var(--text-muted);margin-bottom:5px;letter-spacing:0.5px;}
+.wifi-field-value{
+  font-size:14px;font-weight:600;
+  font-family:"SF Mono","Fira Code","Courier New",monospace;
+  color:var(--accent);background:rgba(56,189,248,0.06);
+  border:1px solid rgba(56,189,248,0.15);
+  border-radius:8px;padding:8px 12px;
+  cursor:pointer;transition:background 0.15s;letter-spacing:1px;
+}
+.wifi-field-value:hover{background:rgba(56,189,248,0.12);}
+.wifi-note{font-size:11px;color:var(--text-muted);line-height:1.5;padding-top:12px;border-top:1px solid rgba(96,165,250,0.1);}
+
+/* ── Contacts ── */
+.contact-search{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(96,165,250,0.15);
+  border-radius:10px;padding:10px 16px;width:100%;
+  font-size:13px;font-family:inherit;color:#fff;outline:none;
+  margin-bottom:16px;transition:border-color 0.15s;
+}
+.contact-search::placeholder{color:rgba(148,184,216,0.5);}
+.contact-search:focus{border-color:rgba(56,189,248,0.4);}
+.dept-group{margin-bottom:20px;}
+.dept-label{font-size:11px;font-weight:600;color:rgba(148,184,216,0.5);letter-spacing:1px;text-transform:uppercase;padding:0 0 8px;border-bottom:1px solid rgba(96,165,250,0.08);margin-bottom:10px;}
+.contact-item{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:8px;
+  display:flex;align-items:center;gap:12px;
+  transition:all 0.15s;cursor:pointer;
+}
+.contact-item:hover{border-color:rgba(56,189,248,0.3);background:rgba(56,189,248,0.04);}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+.av-blue{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;}
+.av-teal{background:linear-gradient(135deg,#0f766e,#0d9488);color:#fff;}
+.av-coral{background:linear-gradient(135deg,#b45309,#d97706);color:#fff;}
+.av-purple{background:linear-gradient(135deg,#6d28d9,#8b5cf6);color:#fff;}
+.av-green{background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;}
+.contact-info{flex:1;}
+.contact-name{font-size:13px;font-weight:500;color:#fff;}
+.contact-dept{font-size:11px;color:var(--text-muted);margin-top:1px;}
+.contact-right{text-align:right;}
+.contact-phone{font-size:12px;color:var(--accent);font-family:"SF Mono","Fira Code",monospace;font-weight:600;}
+.contact-ext{font-size:10px;color:var(--text-muted);margin-top:2px;}
+
+/* ── Memo ── */
+.memo-compose{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:20px;margin-bottom:20px;
+}
+.memo-compose-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.memo-compose-title{font-size:13px;font-weight:600;color:#fff;}
+.memo-today{font-size:11px;color:var(--text-muted);}
+textarea{
+  width:100%;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(96,165,250,0.15);
+  border-radius:var(--radius-sm);padding:12px 14px;
+  font-size:13px;font-family:inherit;color:#fff;
+  resize:vertical;min-height:110px;outline:none;
+  transition:border-color 0.15s;line-height:1.6;
+}
+textarea::placeholder{color:rgba(148,184,216,0.4);}
+textarea:focus{border-color:rgba(56,189,248,0.4);}
+.btn-save{
+  margin-top:12px;padding:9px 24px;
+  background:linear-gradient(135deg,var(--blue),var(--accent2));
+  color:#fff;border:none;border-radius:10px;
+  font-size:13px;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:opacity 0.15s;letter-spacing:0.5px;
+}
+.btn-save:hover{opacity:0.88;}
+.saved-memo{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px;
+  transition:border-color 0.15s;
+}
+.saved-memo:hover{border-color:rgba(96,165,250,0.25);}
+.sm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.sm-date{font-size:11px;color:var(--text-muted);}
+.sm-del{font-size:11px;color:rgba(248,113,113,0.7);cursor:pointer;transition:color 0.15s;}
+.sm-del:hover{color:#f87171;}
+.sm-body{font-size:13px;color:var(--light);white-space:pre-wrap;line-height:1.7;}
+.memo-empty{text-align:center;padding:32px;font-size:13px;color:var(--text-muted);}
+
+/* ── Quick Access (homepage) ── */
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
+.qa-card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:20px;text-align:center;
+  cursor:pointer;transition:all 0.2s;
+}
+.qa-card:hover{transform:translateY(-3px);border-color:rgba(56,189,248,0.35);box-shadow:0 8px 24px rgba(56,189,248,0.1);}
+.qa-icon{font-size:28px;margin-bottom:10px;}
+.qa-title{font-size:13px;font-weight:500;color:#fff;margin-bottom:3px;}
+.qa-sub{font-size:11px;color:var(--text-muted);}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.3);
+  border-radius:10px;padding:10px 18px;
+  font-size:13px;color:var(--accent);font-weight:500;
+  transform:translateY(60px);opacity:0;transition:all 0.3s;pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ── Privacy Notice ── */
+.privacy-notice{
+  background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);
+  border-radius:var(--radius-sm);padding:12px 16px;
+  font-size:12px;color:rgba(251,191,36,0.8);margin-top:16px;
+  display:flex;gap:8px;align-items:center;
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-muted);margin-bottom:20px;}
+.breadcrumb span{color:var(--accent);}
+.bc-sep{color:rgba(148,184,216,0.3);}
+
+.menu-toggle{
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  width:40px;
+  height:40px;
+  margin-right:8px;
+  padding:8px;
+  border:1px solid rgba(148,184,255,0.35);
+  border-radius:10px;
+  background:var(--glass);
+  cursor:pointer;
+  flex-shrink:0;
+  z-index:3;
+  -webkit-tap-highlight-color:transparent;
+}
+.menu-toggle-bar{
+  display:block;
+  width:100%;
+  height:2px;
+  border-radius:2px;
+  background:#dce7ff;
+  transition:transform 0.2s ease,opacity 0.2s ease;
+}
+body.sidebar-open .menu-toggle-bar:nth-child(1){transform:translateY(7px) rotate(45deg);}
+body.sidebar-open .menu-toggle-bar:nth-child(2){opacity:0;}
+body.sidebar-open .menu-toggle-bar:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+.sidebar-backdrop{display:none;}
+
+@media(max-width:1024px){
+  .layout{grid-template-columns:200px 1fr;}
+  .content{padding:24px;}
+}
+
+@media(max-width:768px){
+  .menu-toggle{display:flex;}
+  .topbar{
+    position:sticky;
+    top:0;
+    flex-wrap:wrap;
+    height:auto;
+    min-height:var(--topbar-height);
+    padding-top:calc(8px + env(safe-area-inset-top,0px));
+    padding-bottom:8px;
+    gap:8px;
+    z-index:120;
+  }
+  .topbar-brand{max-width:none;flex:1;min-width:0;}
+  .brand-text-sub{white-space:normal;line-height:1.35;}
+  .topbar-nav{
+    position:static;
+    transform:none;
+    order:3;
+    width:100%;
+    justify-content:center;
+    pointer-events:auto;
+  }
+  .topbar-nav .nav-list{width:100%;justify-content:stretch;gap:6px;}
+  .topbar-nav .nav-list li{flex:1;}
+  .nav-button{width:100%;justify-content:center;padding:8px 10px;font-size:12px;}
+  .nav-button span.badge{display:none;}
+  .topbar-tag{font-size:9px;padding:3px 8px;}
+
+  .sidebar-backdrop{
+    display:block;
+    position:fixed;
+    inset:0;
+    z-index:90;
+    background:rgba(2,5,20,0.65);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.25s ease,visibility 0.25s;
+  }
+  body.sidebar-open .sidebar-backdrop{opacity:1;visibility:visible;}
+
+  .layout{grid-template-columns:1fr;}
+  .sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:min(280px,88vw);
+    height:100%;
+    height:100dvh;
+    z-index:100;
+    transform:translateX(-100%);
+    transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    padding-top:calc(var(--topbar-height) + env(safe-area-inset-top,0px) + 8px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    box-shadow:8px 0 32px rgba(0,0,0,0.45);
+  }
+  body.sidebar-open .sidebar{transform:translateX(0);}
+
+  .content{
+    padding:16px;
+    padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  }
+  .hero{padding:22px 20px;margin-bottom:20px;border-radius:16px;}
+  .hero h1{font-size:20px;}
+  .hero p{font-size:12px;}
+  .sec-title{font-size:14px;}
+  .qa-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .qa-card{padding:16px 12px;}
+  .qa-icon{font-size:24px;margin-bottom:8px;}
+  .wifi-grid{grid-template-columns:1fr;}
+  .pwd-grid{grid-template-columns:1fr;}
+  .ann-item{padding:14px 16px;}
+  .contact-item{flex-wrap:wrap;}
+  .contact-right{width:100%;text-align:left;margin-top:4px;}
+  .toast{left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));}
+  .sidebar-item{min-height:44px;}
+  .sidebar{-webkit-overflow-scrolling:touch;}
+}
+
+@media(max-width:480px){
+  .brand-text-sub{display:none;}
+  .brand-logo img{height:24px;}
+  .content{padding:12px;}
+  .qa-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:18px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button type="button" class="menu-toggle" id="menuToggle" aria-label="打开导航菜单" aria-controls="sidebarNav" aria-expanded="false">
+    <span class="menu-toggle-bar"></span>
+    <span class="menu-toggle-bar"></span>
+    <span class="menu-toggle-bar"></span>
+  </button>
+
+  <div class="topbar-brand">
+    <div class="brand-logo">
+      <img src="logo.png" alt="JECCY Logo" />
+    </div>
+    <div class="brand-text-block">
+      <div class="brand-text-sub">Enterprise Knowledge &amp; Training Console</div>
+    </div>
+  </div>
+
+  <nav class="topbar-nav" aria-label="主导航">
+    <ul class="nav-list">
+      <li>
+        <a href="JECCY_培训学院.html" class="nav-button">
+          <span class="icon-dot"></span>
+          <span class="label">培训学院</span>
+          <span class="badge">Academy</span>
+        </a>
+      </li>
+      <li>
+        <a href="JECCY_企业信息库.html" class="nav-button active">
+          <span class="icon-dot"></span>
+          <span class="label">企业信息库</span>
+          <span class="badge">Information</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="topbar-right">
+    <div class="topbar-tag">JECCY · Admin</div>
+  </div>
+</header>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebarNav" aria-label="信息库导航">
+  <div class="sidebar-logo-area">
+    <div class="sidebar-app-title">📚 企业信息库</div>
+    <div class="sidebar-app-sub">员工日常服务中心</div>
+  </div>
+
+  <div class="sidebar-cat">信息中心</div>
+  <div class="sidebar-item active" onclick="show('s-home',this)">
+    <span class="si-icon">🏠</span>首页总览
+  </div>
+  <div class="sidebar-item" onclick="show('s-notice',this)">
+    <span class="si-icon">📢</span>最新公告
+  </div>
+
+  <div class="sidebar-cat">门禁 & 网络</div>
+  <div class="sidebar-item" onclick="show('s-access',this)">
+    <span class="si-icon">🔐</span>门禁密码
+  </div>
+  <div class="sidebar-item" onclick="show('s-wifi',this)">
+    <span class="si-icon">📶</span>Wi-Fi 密码
+  </div>
+
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-cat">通讯 & 工具</div>
+  <div class="sidebar-item" onclick="show('s-contacts',this)">
+    <span class="si-icon">📞</span>通讯录
+  </div>
+  <div class="sidebar-item" onclick="show('s-memo',this)">
+    <span class="si-icon">📝</span>我的备忘录
+  </div>
+</aside>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ══ 首页总览 ══ -->
+  <div class="screen active" id="s-home">
+    <div class="hero">
+      <div class="hero-tag">员工服务</div>
+      <h1>JECCY <span>企业信息库</span></h1>
+      <p>快速获取公司公告、门禁密码、Wi-Fi 信息及部门联系方式，一站式员工服务平台。</p>
+    </div>
+    <div class="sec-title">快速入口</div>
+    <div class="qa-grid">
+      <div class="qa-card" onclick="show('s-notice', document.querySelector('[data-id=notice]'))">
+        <div class="qa-icon">📢</div>
+        <div class="qa-title">最新公告</div>
+        <div class="qa-sub">4 条未读</div>
+      </div>
+      <div class="qa-card" onclick="show('s-access', document.querySelector('[data-id=access]'))">
+        <div class="qa-icon">🔐</div>
+        <div class="qa-title">门禁密码</div>
+        <div class="qa-sub">本月有效</div>
+      </div>
+      <div class="qa-card" onclick="show('s-wifi', document.querySelector('[data-id=wifi]'))">
+        <div class="qa-icon">📶</div>
+        <div class="qa-title">Wi-Fi 密码</div>
+        <div class="qa-sub">4 个网络</div>
+      </div>
+      <div class="qa-card" onclick="show('s-contacts', document.querySelector('[data-id=contacts]'))">
+        <div class="qa-icon">📞</div>
+        <div class="qa-title">通讯录</div>
+        <div class="qa-sub">43 位联系人</div>
+      </div>
+      <div class="qa-card" onclick="show('s-memo', document.querySelector('[data-id=memo]'))">
+        <div class="qa-icon">📝</div>
+        <div class="qa-title">备忘录</div>
+        <div class="qa-sub">记录待办</div>
+      </div>
+    </div>
+
+    <div class="sec-title">今日公告</div>
+    <div class="ann-item" style="margin-bottom:10px;">
+      <div class="ann-indicator ind-urgent"></div>
+      <div class="ann-body">
+        <div class="ann-title-text">安全生产专项检查通知</div>
+        <div class="ann-meta">2026-06-10 · 安全部 · 请全员知晓</div>
+      </div>
+      <div class="ann-badge badge-urgent">紧急</div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-indicator ind-new"></div>
+      <div class="ann-body">
+        <div class="ann-title-text">2026年节假日安排通知</div>
+        <div class="ann-meta">2026-06-15 · 行政部</div>
+      </div>
+      <div class="ann-badge badge-new">最新</div>
+    </div>
+  </div>
+
+  <!-- ══ 最新公告 ══ -->
+  <div class="screen" id="s-notice">
+    <div class="breadcrumb">企业信息库 <span class="bc-sep">›</span><span>最新公告</span></div>
+    <div class="hero" style="padding:24px 32px;">
+      <div class="hero-tag">信息中心</div>
+      <h1>最新<span>公告</span></h1>
+      <p>所有重要通知将第一时间在此发布，请定期查看。</p>
+    </div>
+    <div class="sec-title">全部公告</div>
+    <div class="ann-list">
+      <div class="ann-item">
+        <div class="ann-indicator ind-urgent"></div>
+        <div class="ann-body">
+          <div class="ann-title-text">安全生产专项检查通知</div>
+          <div class="ann-meta">2026-06-10 · 安全部 · 本周五下午全员参与</div>
+        </div>
+        <div class="ann-badge badge-urgent">紧急</div>
+      </div>
+      <div class="ann-item">
+        <div class="ann-indicator ind-new"></div>
+        <div class="ann-body">
+          <div class="ann-title-text">2026年节假日安排通知</div>
+          <div class="ann-meta">2026-06-15 · 行政部 · 2月7日起放假，2月18日复工</div>
+        </div>
+        <div class="ann-badge badge-new">最新</div>
+      </div>
+      <div class="ann-item">
+        <div class="ann-indicator ind-new"></div>
+        <div class="ann-body">
+          <div class="ann-title-text">员工年度体检安排通知</div>
+          <div class="ann-meta">2026-06-05 · 人力资源部 · 请各部门统一报名</div>
+        </div>
+        <div class="ann-badge badge-new">最新</div>
+      </div>
+      <div class="ann-item">
+        <div class="ann-indicator ind-normal"></div>
+        <div class="ann-body">
+          <div class="ann-title-text">2026年绩效考核制度更新说明</div>
+          <div class="ann-meta">2026-06-02 · 人力资源部 · OKR 体系正式启用</div>
+        </div>
+        <div class="ann-badge badge-normal">常规</div>
+      </div>
+      <div class="ann-item">
+        <div class="ann-indicator ind-normal"></div>
+        <div class="ann-body">
+          <div class="ann-title-text">办公区系统升级维护通知</div>
+          <div class="ann-meta">2026-06-10 · IT 部门 · 6月10日期间进行，不影响正常办公</div>
+        </div>
+        <div class="ann-badge badge-normal">常规</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 门禁密码 ══ -->
+  <div class="screen" id="s-access">
+    <div class="breadcrumb">企业信息库 <span class="bc-sep">›</span><span>门禁密码</span></div>
+    <div class="hero" style="padding:24px 32px;">
+      <div class="hero-tag">门禁安全</div>
+      <h1>门禁<span>密码</span></h1>
+      <p>点击密码框可复制密码。</p>
+    </div>
+    
+    <div class="pwd-grid">
+      <div class="pwd-card">
+        <div class="pwd-header"><div class="pwd-icon">🏢</div><div class="pwd-name">深圳办公室 (天安创新科技广场)</div></div>
+        <div class="pwd-label">办公室密码锁 (点击复制)</div>
+        <div class="pwd-value" onclick="copyText('0528')">0528<div class="copy-hint">点击复制</div></div>
+        <div class="pwd-note">612洗手间：按OK—输入4—按OK—输入12345678—按OK</div>
+      </div>
+  
+      <div class="pwd-card">
+        <div class="pwd-header"><div class="pwd-icon">🏭</div><div class="pwd-name">东莞捷希新工艺制品有限公司</div></div>
+        <div class="pwd-label">公司地址 (点击复制)</div>
+        <div class="pwd-value" onclick="copyText('东莞市东坑镇彭屋三甲工业园路6号')">东莞市东坑镇彭屋三甲工业园路6号<div class="copy-hint">点击复制</div></div>
+      </div>
+    </div>
+
+    <div class="privacy-notice" style="padding: 20px; font-size: 12px; color: #ff4d4f; background: rgba(255, 77, 79, 0.05); border: 1px solid rgba(255, 77, 79, 0.1); border-radius: 8px;">
+      ⚠️ 门禁密码属于公司内部信息，请勿截图或转发给非员工人员。
+    </div>
+  </div>
+
+  <!-- ══ Wi-Fi ══ -->
+  <div class="screen" id="s-wifi">
+    <div class="breadcrumb">企业信息库 <span class="bc-sep">›</span><span>Wi-Fi 密码</span></div>
+    <div class="hero" style="padding:24px 32px;">
+      <div class="hero-tag">网络连接</div>
+      <h1>Wi-Fi <span>接入信息</span></h1>
+      <p>点击密码可复制。访客网络限速，如需高速连接请使用办公室员工网络。</p>
+    </div>
+    
+    <div class="sec-title">可用网络</div>
+    <div class="wifi-grid">
+      <div class="wifi-card">
+          <div class="wifi-top"><div class="wifi-icon">📶</div><div class="wifi-name">深圳 - 办公室 WiFi (VPN)</div></div>
+          <div class="wifi-field">
+              <div class="wifi-field-label">账号</div><div class="wifi-field-value" onclick="copyText('Jeccy_VPN_Wifi')">Jeccy_VPN_Wifi (点击复制)</div>
+              <div class="wifi-field-label">密码</div><div class="wifi-field-value" onclick="copyText('Je8860ccy2884')">Je8860ccy2884 (点击复制)</div>
+          </div>
+      </div>
+      <div class="wifi-card">
+          <div class="wifi-top"><div class="wifi-icon">📶</div><div class="wifi-name">深圳 - MI. JCY 03 & MI. JCY 05</div></div>
+          <div class="wifi-field">
+              <div class="wifi-field-label">连接账号</div><div class="wifi-field-value" onclick="copyText('MI. JCY 03&05')">MI. JCY 03 & MI. JCY05 (点击复制)</div>
+              <div class="wifi-field-label">密码</div><div class="wifi-field-value" onclick="copyText('1234567890')">1234567890 (点击复制)</div>
+          </div>
+      </div>
+      <div class="wifi-card">
+          <div class="wifi-top"><div class="wifi-icon">📶</div><div class="wifi-name">深圳 - Jeccytech New Wifi & Jeccytech Wifi</div></div>
+          <div class="wifi-field">
+              <div class="wifi-field-label">密码</div><div class="wifi-field-value" onclick="copyText('Je8860ccy2884')">Je8860ccy2884 (点击复制)</div>
+          </div>
+      </div>
+      <div class="wifi-card">
+          <div class="wifi-top"><div class="wifi-icon">🏭</div><div class="wifi-name">东莞 - 工厂四楼 WiFi</div></div>
+          <div class="wifi-field">
+              <div class="wifi-field-label">密码</div><div class="wifi-field-value" onclick="copyText('Je1234567890ccY SZO')">Je1234567890ccY SZO (点击复制)</div>
+          </div>
+      </div>
+      <div class="wifi-card">
+          <div class="wifi-top"><div class="wifi-icon">🌐</div><div class="wifi-name">访客网络</div></div>
+          <div class="wifi-field">
+              <div class="wifi-field-label">密码</div><div class="wifi-field-value" onclick="copyText('Welcome2026')">Welcome2026 (点击复制)</div>
+          </div>
+      </div>
+    </div>
+    
+    <div class="privacy-notice" style="background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); padding: 16px; border-radius: 8px; color: #ff9800; margin-bottom: 20px; display: flex; align-items: center;">
+      <span>⚠️ 员工网络密码请勿分享给外部人员，如有需要请为访客连接访客网络。</span>
+    </div>
+  </div>
+
+  <!-- ══ 通讯录 ══ -->
+  <div class="screen" id="s-contacts">
+    <div class="breadcrumb">企业信息库 > 通讯录</div>
+    <div class="hero" style="padding:24px 32px;">
+        <div class="hero-tag">内部资料</div>
+        <h1>通讯录</h1>
+        <p>点击下方查看最新通讯录，建议在电脑端使用以获得最佳预览效果。</p>
+    </div>
+    
+    <div id="contact-list" style="width: 100%; height: 70vh; margin-top: 20px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <embed src="media/通讯录.pdf" width="100%" height="100%">
+    </div>
+</div>
+
+  <!-- ══ 备忘录 ══ -->
+  <div class="screen" id="s-memo">
+    <div class="breadcrumb">企业信息库 <span class="bc-sep">›</span><span>我的备忘录</span></div>
+    <div class="hero" style="padding:24px 32px;">
+      <div class="hero-tag">个人工具</div>
+      <h1>我的<span>备忘录</span></h1>
+      <p>记录工作待办、重要提醒和日常笔记。数据保存在本设备，刷新不丢失。</p>
+    </div>
+    <div class="memo-compose">
+      <div class="memo-compose-top">
+        <div class="memo-compose-title">新建备忘</div>
+        <div class="memo-today" id="memo-today-label"></div>
+      </div>
+      <textarea id="memo-input" placeholder="记录待办事项、重要提醒、工作笔记…&#10;按下保存后将显示在下方列表中"></textarea>
+      <button class="btn-save" onclick="saveMemo()">保存备忘 ↵</button>
+    </div>
+    <div class="sec-title">已保存的备忘</div>
+    <div id="memo-list"></div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<!-- Toast -->
+<div class="toast" id="toast">已复制到剪贴板 ✓</div>
+
+<script>
+/* ── Navigation ── */
+const MOBILE_MQ = window.matchMedia('(max-width: 768px)');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+function isMobileLayout() {
+  return MOBILE_MQ.matches;
+}
+
+function setSidebarOpen(open) {
+  document.body.classList.toggle('sidebar-open', open);
+  menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  sidebarBackdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.body.style.overflow = open && isMobileLayout() ? 'hidden' : '';
+}
+
+function closeMobileSidebar() {
+  if (isMobileLayout()) setSidebarOpen(false);
+}
+
+menuToggle.addEventListener('click', () => setSidebarOpen(!document.body.classList.contains('sidebar-open')));
+sidebarBackdrop.addEventListener('click', closeMobileSidebar);
+MOBILE_MQ.addEventListener('change', () => {
+  if (!isMobileLayout()) setSidebarOpen(false);
+});
+
+function show(id, el) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelector('.content').scrollTop = 0;
+  closeMobileSidebar();
+}
+
+/* Sidebar items need data-id to be linked from quick access cards */
+document.querySelectorAll('.sidebar-item').forEach((el, i) => {
+  const ids = ['s-home','s-notice','s-access','s-wifi','s-contacts','s-memo'];
+  const dataIds = ['home','notice','access','wifi','contacts','memo'];
+  el.setAttribute('data-id', dataIds[i] || '');
+});
+
+/* ── Copy ── */
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast()).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el); showToast();
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ── Contacts Search ── */
+function filterContacts(query) {
+  const q = query.trim().toLowerCase();
+  document.querySelectorAll('.dept-group').forEach(g => {
+    const items = g.querySelectorAll('.contact-item');
+    let visible = 0;
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const show = !q || text.includes(q);
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    g.style.display = visible ? '' : 'none';
+  });
+}
+
+/* ── Memo ── */
+let memos = JSON.parse(localStorage.getItem('jeccy_memos_v2') || '[]');
+
+function saveMemo() {
+  const input = document.getElementById('memo-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const now = new Date();
+  memos.unshift({
+    id: Date.now(),
+    text,
+    date: now.toLocaleDateString('zh-CN') + ' ' + now.toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'})
+  });
+  persist(); input.value = ''; renderMemos();
+}
+function deleteMemo(id) {
+  memos = memos.filter(m => m.id !== id);
+  persist(); renderMemos();
+}
+function persist() { localStorage.setItem('jeccy_memos_v2', JSON.stringify(memos)); }
+function renderMemos() {
+  const container = document.getElementById('memo-list');
+  if (!memos.length) {
+    container.innerHTML = '<div class="memo-empty">暂无备忘记录，在上方输入框添加吧～</div>';
+    return;
+  }
+  container.innerHTML = memos.map(m => `
+    <div class="saved-memo">
+      <div class="sm-header">
+        <span class="sm-date">${m.date}</span>
+        <span class="sm-del" onclick="deleteMemo(${m.id})">删除</span>
+      </div>
+      <div class="sm-body">${m.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+    </div>`).join('');
+}
+
+/* ── Init ── */
+const todayEl = document.getElementById('memo-today-label');
+if (todayEl) todayEl.textContent = new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'});
+renderMemos();
+</script>
+</body>
+</html>

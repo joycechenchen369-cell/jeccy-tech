@@ -1,0 +1,46 @@
+{
+  "categories": [
+    {
+      "id": "module_1",
+      "name": "模块一：入职必修",
+      "items": [
+        { "id": "v1", "title": "公司简介宣传片", "type": "video", "path": "media/d1-Jeccy_Dongguan_Promo_202410.mp4" },
+        { "id": "d2", "title": "员工手册", "type": "pdf", "path": "media/d2-Employee_Manual_CN.pdf" },
+        { "id": "d1", "title": "组织架构", "type": "pdf", "path": "media/d4-Jeccy_Org_Chart.pdf" },
+        { "id": "d3", "title": "业务流程", "type": "pdf", "path": "media/d5-Jeccy_Business_Process_CNEN_1007.pdf" }
+      ]
+    },
+    {
+      "id": "module_2",
+      "name": "模块二：业务培训",
+      "items": [
+        { "id": "d7", "title": "高效沟通", "type": "pdf", "path": "media/a-Efficient Communication Training.pdf" },
+        {
+          "id": "d4",
+          "title": "产品工艺知识",
+          "children": [
+            { "id": "b1", "title": "1-包包部位名称中英文.xls", "type": "pdf", "path": "media/b1-Bag_Part_Name_ENCN.pdf" },
+            { "id": "b2", "title": "2-包包工艺.docx", "type": "pdf", "path": "media/b2-Bag_Production_Process.pdf" },
+            { "id": "b3", "title": "3-手袋车缝工艺标准.docx", "type": "pdf", "path": "media/b3-Handbag_Sewing_Standard.pdf" },
+            { "id": "b4", "title": "4-皮具工艺生产流程.doc", "type": "pdf", "path": "media/b4-Leather_Production_Flow.pdf" },
+            { "id": "b5", "title": "5-手袋制作工艺.pdf", "type": "pdf", "path": "media/b5-Handbag_Manufacture_Craft.pdf" },
+            { "id": "b6", "title": "6-手袋的制作流程.pptx", "type": "pdf", "path": "media/b6-Handbag_Making_Process.pdf" },
+            { "id": "b7", "title": "7-手袋出格技术指导.pdf", "type": "pdf", "path": "media/b7-Handbag_Pattern_Guide.pdf" },
+            { "id": "b8", "title": "8-手袋各部位的专业名称.pptx", "type": "pdf", "path": "media/b8-Handbag_Part_Terms.pdf" },
+            { "id": "b9", "title": "9-箱包PU面料知识点.pdf", "type": "pdf", "path": "media/b9-Case_PU_Fabric_Knowledge.pdf" },
+            { "id": "b10", "title": "10-捷希手机壳等产品工艺 V1.0.docx", "type": "pdf", "path": "media/b10-Jexi_PhoneCase_Craft_V1.0.pdf" }
+          ]
+        },
+        {
+          "id": "d5",
+          "title": "环保测试知识",
+          "children": [
+            { "id": "c0", "title": "产品测试试卷", "type": "folder" },
+            { "id": "c2", "title": "产品测试题及答案.docx", "type": "pdf", "path": "media/c2-Jeccy_Product_Test_QA.pdf" },
+            { "id": "c1", "title": "cJeccy_Environmental_Testing.pptx", "type": "pdf", "path": "media/c1Jeccy_Environmental_Test_Training.pdf" }
+          ]
+        }
+      ]
+    }
+  ]
+}
